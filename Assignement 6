@@ -1,6 +1,13 @@
 import pandas as pd
 
-# Read the Excel file
+###
+###  WHAT DO I DO NOW?
+###
+###
+
+
+
+# Read the file
 file_path = "C:/Users/atrac/Downloads/baseball(1).xlsx"
 data = pd.read_excel(file_path)
 
