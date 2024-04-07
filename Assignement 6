@@ -1,0 +1,32 @@
+import pandas as pd
+
+# Read the Excel file
+file_path = "C:/Users/atrac/Downloads/baseball(1).xlsx"
+data = pd.read_excel(file_path)
+
+# Extract relevant columns
+teams = data['Team'].unique()  # Get unique team names
+runs_scored = data.groupby('Team')['Runs Scored'].mean()  # Average runs scored for each team
+runs_allowed = data.groupby('Team')['Runs Allowed'].mean()  # Average runs allowed for each team
+wins = data.groupby('Team')['Wins'].mean()  # Average wins for each team
+obp = data.groupby('Team')['OBP'].mean()  # Average OBP for each team
+slg = data.groupby('Team')['SLG'].mean()  # Average SLG for each team
+team_batting_average = data.groupby('Team')['Team Batting Average'].mean()  # Average team batting average for each team
+playoffs = data.groupby('Team')['Playoffs'].max()  # Maximum value of playoffs for each team
+
+# Calculate a score for each team to predict playoff appearance
+team_score = (runs_scored - runs_allowed) * wins * obp * slg * team_batting_average
+
+# Create a DataFrame to hold team names and their corresponding scores
+team_scores = pd.DataFrame({'Team': teams, 'Score': team_score})
+
+# Sort teams by their scores in descending order
+team_scores = team_scores.sort_values(by='Score', ascending=False)
+
+# Predict playoff teams based on the threshold value
+predicted_playoffs = team_scores['Team'].head(12)  # Only select the top 12 teams
+
+# Display the predicted playoff teams with rankings
+print("\nPredicted Playoff Teams:")
+for rank, team in enumerate(predicted_playoffs, start=1):
+    print(f"{rank}. {team}")
